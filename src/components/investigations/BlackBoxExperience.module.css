@@ -1,0 +1,790 @@
+.experience {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 78% 8%, rgb(76 125 255 / 0.08), transparent 28rem),
+    var(--color-void);
+  overflow: clip;
+}
+
+.scene {
+  position: relative;
+  min-height: 92svh;
+  border-bottom: 1px solid var(--color-line-soft);
+}
+
+.coldOpen {
+  background:
+    radial-gradient(circle at 83% 42%, rgb(155 107 255 / 0.13), transparent 24rem),
+    radial-gradient(circle at 68% 56%, rgb(69 224 210 / 0.06), transparent 20rem),
+    linear-gradient(180deg, #05070e 0%, #070b16 100%);
+}
+
+.starField,
+.gridPlane {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.starField {
+  opacity: 0.72;
+  background-image:
+    radial-gradient(circle at 11% 18%, rgb(255 255 255 / 0.55) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 27% 71%, rgb(109 151 255 / 0.65) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 61% 22%, rgb(69 224 210 / 0.6) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 79% 68%, rgb(255 255 255 / 0.45) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 91% 31%, rgb(155 107 255 / 0.65) 0 1px, transparent 1.2px);
+  background-size: 19rem 17rem, 23rem 21rem, 17rem 19rem, 29rem 23rem, 31rem 27rem;
+  animation: starDrift 28s linear infinite;
+}
+
+.progressRail {
+  position: fixed;
+  z-index: 35;
+  top: 50%;
+  right: clamp(0.75rem, 2vw, 2rem);
+  display: none;
+  transform: translateY(-50%);
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--color-faint);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+}
+
+.progressRail i {
+  display: block;
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(var(--color-line), transparent);
+}
+
+.progressActive {
+  color: var(--color-cyan);
+}
+
+.primaryButton,
+.secondaryButton,
+.nextButton {
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 650;
+  transition:
+    transform 180ms var(--ease-out-expo),
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.primaryButton {
+  display: inline-flex;
+  border: 1px solid rgb(109 151 255 / 0.65);
+  background: linear-gradient(110deg, var(--color-blue), var(--color-violet));
+  color: white;
+  padding: 0.85rem 1.25rem;
+  box-shadow: 0 14px 42px -18px rgb(76 125 255 / 0.75);
+}
+
+.secondaryButton {
+  display: inline-flex;
+  border: 1px solid var(--color-line);
+  background: rgb(10 16 32 / 0.55);
+  color: var(--color-muted);
+  padding: 0.85rem 1.25rem;
+}
+
+.primaryButton:hover,
+.nextButton:hover {
+  transform: translateY(-2px);
+}
+
+.secondaryButton:hover {
+  border-color: #2a3963;
+  color: var(--color-ink);
+}
+
+.transmissionWrap {
+  position: relative;
+  margin-inline: auto;
+  width: min(100%, 39rem);
+}
+
+.signalHalo {
+  position: absolute;
+  inset: -18% -12%;
+  border-radius: 50%;
+  border: 1px solid rgb(76 125 255 / 0.14);
+  animation: haloPulse 5s ease-in-out infinite;
+}
+
+.signalHalo::before,
+.signalHalo::after {
+  content: "";
+  position: absolute;
+  inset: 11%;
+  border-radius: inherit;
+  border: 1px solid rgb(155 107 255 / 0.12);
+}
+
+.signalHalo::after {
+  inset: 23%;
+  border-color: rgb(69 224 210 / 0.1);
+}
+
+.transmission {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #1d2a4a;
+  border-radius: 1.4rem;
+  background:
+    linear-gradient(180deg, rgb(16 26 48 / 0.93), rgb(7 11 22 / 0.96)),
+    var(--color-deep);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 0.04),
+    0 38px 90px -45px rgb(76 125 255 / 0.7);
+}
+
+.transmission::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background: repeating-linear-gradient(180deg, transparent 0 3px, rgb(109 151 255 / 0.08) 4px);
+}
+
+.transmissionHeader,
+.transmissionFooter,
+.consoleTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.15em;
+  color: var(--color-faint);
+}
+
+.transmissionHeader {
+  border-bottom: 1px solid var(--color-line);
+  padding: 1rem 1.2rem;
+}
+
+.signalStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-cyan);
+}
+
+.signalStatus i {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--color-cyan);
+  box-shadow: 0 0 0 0 rgb(69 224 210 / 0.5);
+  animation: signalPing 2s ease-out infinite;
+}
+
+.messageRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  padding: 1.4rem 1.2rem;
+}
+
+.messageRow + .messageRow {
+  border-top: 1px solid var(--color-line-soft);
+}
+
+.messageRow p {
+  margin: 0;
+  font-size: clamp(1rem, 0.96rem + 0.24vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--color-muted);
+}
+
+.aiMessage {
+  background: linear-gradient(90deg, rgb(76 125 255 / 0.07), transparent 60%);
+}
+
+.aiMessage p {
+  color: var(--color-ink);
+}
+
+.speaker {
+  padding-top: 0.18rem;
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  letter-spacing: 0.13em;
+  color: var(--color-blue-bright);
+}
+
+.aiMessage .speaker {
+  color: var(--color-cyan);
+}
+
+.transmissionFooter {
+  border-top: 1px solid var(--color-line);
+  padding: 0.85rem 1.2rem;
+}
+
+.verdictLine {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  border-left: 1px solid var(--color-violet);
+  padding: 0.3rem 0 0.3rem 1rem;
+  font-size: 0.88rem;
+  color: var(--color-dim);
+}
+
+.verdictLine strong {
+  color: var(--color-ink);
+  font-weight: 550;
+}
+
+.tokenScene {
+  background:
+    radial-gradient(circle at 50% 48%, rgb(76 125 255 / 0.11), transparent 27rem),
+    linear-gradient(180deg, #070b16, #05070e);
+}
+
+.gridPlane {
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgb(76 125 255 / 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(76 125 255 / 0.12) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: linear-gradient(180deg, transparent, black 25%, black 75%, transparent);
+  transform: perspective(700px) rotateX(63deg) scale(1.6) translateY(9%);
+  transform-origin: center;
+}
+
+.tokenMachine {
+  position: relative;
+  margin: clamp(3.5rem, 8vw, 6.5rem) auto 0;
+  max-width: 64rem;
+  min-height: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #1b2948;
+  border-radius: 1.6rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background:
+    radial-gradient(circle at center, rgb(16 26 48 / 0.9), rgb(7 11 22 / 0.96) 66%),
+    var(--color-abyss);
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.04);
+}
+
+.machineRings {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(58vw, 29rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.machineRings i {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(76 125 255 / 0.18);
+  border-radius: 50%;
+  animation: ringSpin 14s linear infinite;
+}
+
+.machineRings i:nth-child(2) {
+  inset: 14%;
+  border-style: dashed;
+  border-color: rgb(155 107 255 / 0.23);
+  animation-duration: 9s;
+  animation-direction: reverse;
+}
+
+.machineRings i:nth-child(3) {
+  inset: 30%;
+  border-color: rgb(69 224 210 / 0.22);
+  animation-duration: 7s;
+}
+
+.machineLabel {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  color: var(--color-faint);
+}
+
+.tokenRow {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+}
+
+.tokenChip {
+  min-width: 4rem;
+  border: 1px solid #26365d;
+  border-radius: 0.85rem;
+  padding: 0.78rem 0.9rem 0.65rem;
+  background: rgb(5 7 14 / 0.86);
+  color: var(--color-ink);
+  text-align: left;
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  transition:
+    transform 180ms var(--ease-out-expo),
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.tokenMachine[data-open="true"] .tokenChip {
+  animation: tokenArrive 560ms var(--ease-out-expo) forwards;
+  animation-delay: var(--token-delay);
+}
+
+.tokenChip:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-blue);
+}
+
+.tokenChip span,
+.tokenChip small {
+  display: block;
+}
+
+.tokenChip span {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.tokenChip small {
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--color-faint);
+}
+
+.tokenActive {
+  border-color: var(--color-cyan);
+  background: rgb(69 224 210 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(69 224 210 / 0.07);
+}
+
+.tokenInspector {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  margin-top: 2rem;
+  gap: 1rem;
+  border-top: 1px solid var(--color-line);
+  padding-top: 1.5rem;
+}
+
+.tokenInspector > div {
+  min-width: 0;
+}
+
+.inspectorLabel {
+  margin-bottom: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.inspectorToken {
+  font-size: 1.4rem;
+  color: var(--color-cyan);
+}
+
+.tokenInspector code,
+.tokenInspector strong {
+  color: var(--color-ink);
+}
+
+.tokenInspector code {
+  display: block;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-blue-bright);
+}
+
+.inspectorNote {
+  grid-column: 1 / -1;
+  border-left: 1px solid var(--color-blue);
+  padding-left: 1rem;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.truthStrip {
+  display: grid;
+  margin: 1.25rem auto 0;
+  max-width: 64rem;
+  grid-template-columns: auto 1fr;
+  gap: 0.7rem;
+  border: 1px solid #1b2948;
+  border-radius: 1rem;
+  background: rgb(10 16 32 / 0.62);
+  padding: 1rem 1.1rem;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--color-dim);
+}
+
+.truthStrip span {
+  color: var(--color-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gameScene {
+  background:
+    radial-gradient(circle at 75% 38%, rgb(155 107 255 / 0.09), transparent 25rem),
+    linear-gradient(180deg, #05070e, #070b16);
+}
+
+.roundCounter {
+  display: flex;
+  margin-top: 2.5rem;
+  max-width: 17rem;
+  align-items: end;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-line);
+  padding-top: 1rem;
+  font-family: var(--font-mono);
+}
+
+.roundCounter span {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--color-faint);
+}
+
+.roundCounter strong {
+  font-size: 1.2rem;
+  color: var(--color-cyan);
+}
+
+.gameConsole {
+  overflow: hidden;
+  border: 1px solid #213054;
+  border-radius: 1.5rem;
+  background: linear-gradient(180deg, rgb(12 20 38 / 0.96), rgb(5 7 14 / 0.96));
+  box-shadow: 0 35px 80px -48px rgb(155 107 255 / 0.7);
+}
+
+.consoleTopline {
+  border-bottom: 1px solid var(--color-line);
+  padding: 1rem 1.2rem;
+}
+
+.consoleTopline span:last-child {
+  color: var(--color-cyan);
+}
+
+.promptText {
+  padding: clamp(1.5rem, 4vw, 2.4rem) clamp(1.2rem, 4vw, 2.2rem) 1.4rem;
+  font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+}
+
+.optionGrid {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0 clamp(1.2rem, 4vw, 2.2rem) 2rem;
+}
+
+.optionButton {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  min-height: 3.7rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.9rem;
+  background: rgb(16 26 48 / 0.46);
+  padding: 0.9rem 1rem;
+  color: var(--color-muted);
+  text-align: left;
+  transition:
+    transform 160ms var(--ease-out-expo),
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.optionButton:not(:disabled):hover {
+  transform: translateX(5px);
+  border-color: #35508a;
+  background: rgb(16 26 48 / 0.78);
+  color: var(--color-ink);
+}
+
+.optionButton strong {
+  position: relative;
+  z-index: 2;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.optionButton span {
+  position: relative;
+  z-index: 2;
+  font-weight: 550;
+}
+
+.optionSelected {
+  border-color: var(--color-violet);
+  color: var(--color-ink);
+}
+
+.optionTop {
+  border-color: var(--color-cyan);
+}
+
+.probabilityBar {
+  position: absolute;
+  inset: auto auto 0 0;
+  width: var(--probability);
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-blue), var(--color-cyan));
+  animation: barGrow 560ms var(--ease-out-expo) both;
+  transform-origin: left;
+}
+
+.consoleFooter {
+  display: flex;
+  min-height: 5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--color-line);
+  padding: 1rem 1.2rem;
+}
+
+.consoleFooter p {
+  max-width: 36rem;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--color-dim);
+}
+
+.consoleFooter strong {
+  color: var(--color-ink);
+}
+
+.nextButton {
+  flex: 0 0 auto;
+  display: inline-flex;
+  border: 1px solid rgb(69 224 210 / 0.4);
+  background: rgb(69 224 210 / 0.08);
+  padding: 0.7rem 1rem;
+  color: var(--color-cyan);
+}
+
+.scorePanel {
+  margin-top: 1.2rem;
+  border: 1px solid var(--color-line);
+  border-radius: 1.5rem;
+  background: rgb(10 16 32 / 0.65);
+  padding: clamp(1.4rem, 4vw, 2.2rem);
+  opacity: 0.45;
+  transform: translateY(8px);
+  transition:
+    opacity 420ms ease,
+    transform 420ms var(--ease-out-expo),
+    border-color 420ms ease;
+}
+
+.scoreVisible {
+  opacity: 1;
+  transform: translateY(0);
+  border-color: #2c4776;
+}
+
+.scoreReadout {
+  display: flex;
+  margin-top: 0.9rem;
+  align-items: baseline;
+}
+
+.scoreReadout strong {
+  font-size: clamp(3.8rem, 2.6rem + 6vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  color: var(--color-ink);
+}
+
+.scoreReadout span {
+  margin-left: 0.5rem;
+  font-family: var(--font-mono);
+  color: var(--color-faint);
+}
+
+.scorePanel > p:not(:first-child) {
+  margin-top: 1rem;
+  max-width: 37rem;
+  color: var(--color-dim);
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+.scoreInsight {
+  margin-top: 1.5rem;
+  border-left: 2px solid var(--color-cyan);
+  padding: 0.25rem 0 0.25rem 1.1rem;
+}
+
+.scoreInsight span {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--color-cyan);
+}
+
+.scoreInsight strong {
+  display: block;
+  color: var(--color-ink);
+  font-size: 1rem;
+}
+
+.scoreInsight p {
+  margin-top: 0.55rem;
+  color: var(--color-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.exitScene {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 0%, rgb(76 125 255 / 0.11), transparent 26rem),
+    #05070e;
+}
+
+@media (min-width: 48rem) {
+  .progressRail {
+    display: flex;
+  }
+
+  .tokenInspector {
+    grid-template-columns: 0.7fr 0.8fr 1.5fr;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .messageRow {
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.7rem;
+  }
+
+  .transmissionHeader,
+  .transmissionFooter,
+  .consoleTopline {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .truthStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .consoleFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .nextButton {
+    align-self: flex-start;
+  }
+}
+
+@keyframes tokenArrive {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ringSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes starDrift {
+  50% {
+    transform: translate3d(-0.8rem, 0.5rem, 0);
+  }
+}
+
+@keyframes haloPulse {
+  50% {
+    transform: scale(1.025);
+    opacity: 0.65;
+  }
+}
+
+@keyframes signalPing {
+  60% {
+    box-shadow: 0 0 0 7px rgb(69 224 210 / 0);
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .starField,
+  .signalHalo,
+  .signalStatus i,
+  .machineRings i,
+  .tokenMachine[data-open="true"] .tokenChip,
+  .probabilityBar {
+    animation: none;
+  }
+
+  .tokenChip {
+    opacity: 1;
+    transform: none;
+  }
+}

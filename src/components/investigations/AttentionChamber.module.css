@@ -1,0 +1,620 @@
+.scene {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+  border-bottom: 1px solid var(--color-line-soft);
+  background:
+    radial-gradient(circle at 50% 42%, rgb(155 107 255 / 0.12), transparent 28rem),
+    linear-gradient(180deg, #05070e 0%, #080914 48%, #05070e 100%);
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.52;
+  background-image:
+    radial-gradient(circle at 12% 20%, rgb(255 255 255 / 0.5) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 29% 74%, rgb(109 151 255 / 0.55) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 64% 24%, rgb(155 107 255 / 0.5) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 87% 69%, rgb(69 224 210 / 0.42) 0 1px, transparent 1.2px);
+  background-size: 21rem 18rem, 26rem 22rem, 19rem 23rem, 29rem 25rem;
+}
+
+.contextSwitch {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 3rem;
+}
+
+.contextSwitch button {
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  background: rgb(9 13 26 / 0.78);
+  padding: 1rem 1.1rem;
+  text-align: left;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+  transition:
+    transform 180ms var(--ease-out-expo),
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.contextSwitch button:hover {
+  transform: translateY(-2px);
+  border-color: #2b3761;
+  color: var(--color-ink);
+}
+
+.contextSwitch button strong {
+  border-radius: 0.4rem;
+  background: rgb(155 107 255 / 0.1);
+  padding: 0.12rem 0.25rem;
+  color: var(--color-ink);
+}
+
+.contextSwitch .contextActive {
+  border-color: rgb(155 107 255 / 0.58);
+  background: linear-gradient(105deg, rgb(76 125 255 / 0.08), rgb(155 107 255 / 0.12));
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.035);
+}
+
+.contextSwitch .contextActive strong {
+  color: #d9c8ff;
+}
+
+.chamberGrid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.reactor,
+.readout {
+  border: 1px solid var(--color-line);
+  border-radius: 1.4rem;
+  background: linear-gradient(180deg, rgb(13 16 34 / 0.94), rgb(6 8 18 / 0.96));
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.035);
+}
+
+.reactor {
+  overflow: hidden;
+}
+
+.reactorTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-line-soft);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.13em;
+  color: var(--color-faint);
+}
+
+.reactorTopline strong {
+  color: var(--color-violet);
+}
+
+.reactorField {
+  position: relative;
+  min-height: 34rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 72%, rgb(155 107 255 / 0.14), transparent 15rem),
+    radial-gradient(circle at 50% 22%, rgb(76 125 255 / 0.08), transparent 23rem),
+    repeating-radial-gradient(circle at 50% 75%, transparent 0 5.2rem, rgb(109 151 255 / 0.045) 5.28rem 5.34rem);
+}
+
+.reactorField::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgb(109 151 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(109 151 255 / 0.05) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(circle at 50% 55%, black 8%, transparent 76%);
+}
+
+.orbitA,
+.orbitB {
+  position: absolute;
+  left: 50%;
+  top: 75%;
+  pointer-events: none;
+  border: 1px solid rgb(155 107 255 / 0.13);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.orbitA {
+  width: 18rem;
+  height: 18rem;
+}
+
+.orbitB {
+  width: 29rem;
+  height: 29rem;
+  border-color: rgb(76 125 255 / 0.08);
+}
+
+.beamLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.beamLayer line {
+  --beam-opacity: 0.2;
+  --beam-width: 0.25px;
+  stroke: var(--color-violet);
+  stroke-width: var(--beam-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.12;
+  transition:
+    opacity 500ms ease,
+    stroke-width 500ms ease,
+    stroke 500ms ease;
+}
+
+.reactor[data-phase="2"] .beamLayer line,
+.reactor[data-phase="3"] .beamLayer line {
+  opacity: var(--beam-opacity);
+}
+
+.reactor[data-phase="3"] .beamLayer line {
+  stroke: var(--color-cyan);
+  stroke-dasharray: 2.1 3.2;
+  animation: beamFlow 1.3s linear infinite;
+}
+
+.signalNode {
+  --node-alpha: 0.2;
+  --node-scale: 1;
+  --node-glow: 0.8rem;
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  min-width: 4.7rem;
+  transform: translate(-50%, -50%);
+  place-items: center;
+  border: 1px solid rgb(109 151 255 / 0.18);
+  border-radius: 0.8rem;
+  background: rgb(8 11 23 / 0.93);
+  padding: 0.55rem 0.65rem 0.5rem;
+  box-shadow: 0 10px 30px -20px rgb(76 125 255 / 0.5);
+  transition:
+    border-color 400ms ease,
+    box-shadow 400ms ease,
+    transform 400ms var(--ease-out-expo);
+}
+
+.signalNode span {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+
+.signalNode small {
+  margin-top: 0.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: var(--color-faint);
+}
+
+.reactor[data-phase="2"] .signalNode,
+.reactor[data-phase="3"] .signalNode {
+  border-color: rgb(155 107 255 / var(--node-alpha));
+  box-shadow: 0 0 var(--node-glow) rgb(155 107 255 / 0.18);
+}
+
+.reactor[data-phase="3"] .signalNode {
+  transform: translate(-50%, -50%) scale(var(--node-scale));
+}
+
+.targetNode {
+  position: absolute;
+  left: 50%;
+  top: 75%;
+  z-index: 6;
+  display: grid;
+  min-width: 6.2rem;
+  transform: translate(-50%, -50%);
+  place-items: center;
+  border: 1px solid rgb(192 167 255 / 0.72);
+  border-radius: 999px;
+  background: linear-gradient(110deg, rgb(76 125 255 / 0.96), rgb(155 107 255 / 0.96));
+  padding: 0.78rem 1rem 0.65rem;
+  color: white;
+  box-shadow:
+    0 0 0 0.5rem rgb(155 107 255 / 0.08),
+    0 0 2.8rem rgb(155 107 255 / 0.34);
+}
+
+.targetNode::after {
+  content: "";
+  position: absolute;
+  inset: -0.75rem;
+  border: 1px solid rgb(192 167 255 / 0.18);
+  border-radius: inherit;
+  animation: targetPulse 2.4s ease-in-out infinite;
+}
+
+.targetNode span {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+
+.targetNode small {
+  margin-top: 0.18rem;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  opacity: 0.78;
+}
+
+.flowParticles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.reactor[data-phase="3"] .flowParticles {
+  opacity: 1;
+}
+
+.flowParticles i {
+  position: absolute;
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--color-cyan);
+  box-shadow: 0 0 0.8rem rgb(69 224 210 / 0.55);
+  animation-name: particleDrop;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+
+.phaseControls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--color-line-soft);
+  background: rgb(5 7 14 / 0.45);
+}
+
+.phaseControls button {
+  display: grid;
+  gap: 0.25rem;
+  min-height: 4.8rem;
+  border-right: 1px solid var(--color-line-soft);
+  padding: 0.8rem;
+  text-align: left;
+  color: var(--color-faint);
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.phaseControls button:last-child {
+  border-right: 0;
+}
+
+.phaseControls button:hover,
+.phaseControls .phaseActive {
+  background: rgb(155 107 255 / 0.07);
+  color: var(--color-ink);
+}
+
+.phaseControls button span {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--color-violet);
+}
+
+.phaseControls button strong {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
+.readout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: clamp(1rem, 2.5vw, 1.35rem);
+}
+
+.phaseReadout p,
+.mixerTopline p,
+.resultCard > p,
+.truthStrip > span {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.13em;
+  color: var(--color-faint);
+}
+
+.phaseReadout h3 {
+  margin-top: 0.65rem;
+  max-width: 17ch;
+  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.9rem);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.phaseReadout > span {
+  display: block;
+  margin-top: 0.8rem;
+  font-size: 0.91rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+
+.signalMixer {
+  border-top: 1px solid var(--color-line-soft);
+  padding-top: 1rem;
+}
+
+.mixerTopline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.mixerTopline span {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--color-faint);
+}
+
+.signalMixer ol {
+  display: grid;
+  gap: 0.68rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+  transition: filter 220ms ease, opacity 220ms ease;
+}
+
+.weightsHidden {
+  filter: blur(5px);
+  opacity: 0.24;
+  user-select: none;
+}
+
+.signalMixer li {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(4.8rem, auto) 1fr 2.6rem;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.signalMixer li > span,
+.signalMixer li > em {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-style: normal;
+  color: var(--color-faint);
+}
+
+.signalMixer li > strong {
+  font-size: 0.84rem;
+  font-weight: 550;
+  color: var(--color-ink);
+}
+
+.signalMixer li > i {
+  position: relative;
+  display: block;
+  height: 0.4rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-line-soft);
+}
+
+.signalMixer li > i b {
+  --weight: 10%;
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--weight);
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-violet), var(--color-cyan));
+}
+
+.resultCard {
+  margin-top: auto;
+  border: 1px solid rgb(69 224 210 / 0.2);
+  border-radius: 1rem;
+  background: rgb(69 224 210 / 0.045);
+  padding: 1rem;
+}
+
+.resultCard > div {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.7rem;
+}
+
+.resultCard > div span,
+.resultCard > div strong {
+  color: var(--color-ink);
+}
+
+.resultCard > div span {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.resultCard > div b {
+  color: var(--color-cyan);
+}
+
+.resultCard > div strong {
+  font-size: 0.9rem;
+  font-weight: 550;
+}
+
+.resultCard small {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--color-dim);
+}
+
+.mechanismStrip {
+  display: grid;
+  gap: 1px;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  background: var(--color-line);
+}
+
+.mechanismStrip > div {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgb(8 11 23 / 0.94);
+  padding: 0.9rem 1rem;
+}
+
+.mechanismStrip > div > span {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 1px solid rgb(155 107 255 / 0.35);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-violet);
+}
+
+.mechanismStrip p {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.mechanismStrip strong {
+  color: var(--color-ink);
+}
+
+.truthStrip {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  border-left: 1px solid var(--color-violet);
+  padding: 0.35rem 0 0.35rem 1rem;
+}
+
+.truthStrip > span {
+  color: var(--color-violet);
+}
+
+.truthStrip p {
+  margin: 0;
+  max-width: 78rem;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--color-dim);
+}
+
+@media (min-width: 720px) {
+  .contextSwitch {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mechanismStrip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .chamberGrid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .reactorField {
+    min-height: 28rem;
+  }
+
+  .orbitA {
+    width: 14rem;
+    height: 14rem;
+  }
+
+  .orbitB {
+    width: 23rem;
+    height: 23rem;
+  }
+
+  .signalNode {
+    min-width: 3.8rem;
+    padding-inline: 0.42rem;
+  }
+
+  .signalNode span {
+    font-size: 0.62rem;
+  }
+
+  .signalMixer li {
+    grid-template-columns: 1.4rem 4.5rem 1fr 2.3rem;
+  }
+
+  .reactorTopline span:first-child {
+    max-width: 13rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reactor[data-phase="3"] .beamLayer line,
+  .flowParticles i,
+  .targetNode::after {
+    animation: none;
+  }
+}
+
+@keyframes beamFlow {
+  to { stroke-dashoffset: -10; }
+}
+
+@keyframes targetPulse {
+  0%, 100% { opacity: 0.24; transform: scale(0.98); }
+  50% { opacity: 0.72; transform: scale(1.05); }
+}
+
+@keyframes particleDrop {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.7); }
+  22% { opacity: 0.8; }
+  100% { opacity: 0; transform: translate(0, 18rem) scale(0.2); }
+}
