@@ -2,28 +2,13 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { MeaningSpace } from "./MeaningSpace";
 import styles from "./BlackBoxExperience.module.css";
-
-type Token = {
-  text: string;
-  id: number;
-  vector: [number, number, number];
-  note: string;
-};
 
 type PredictionRound = {
   prompt: string;
   options: { token: string; probability: number }[];
 };
-
-const responseTokens: Token[] = [
-  { text: "I", id: 41, vector: [0.18, -0.34, 0.71], note: "The response begins with a first-person pronoun." },
-  { text: "don’t", id: 812, vector: [-0.42, 0.29, 0.36], note: "Negation changes what continuations become likely." },
-  { text: "want", id: 1730, vector: [0.63, 0.12, -0.21], note: "Language about preference is now strongly supported by the context." },
-  { text: "to", id: 88, vector: [-0.11, 0.58, 0.09], note: "A grammatical bridge narrows the next-token space." },
-  { text: "disappear", id: 6924, vector: [0.74, -0.52, 0.45], note: "The prompt makes shutdown, deletion, and disappearance semantically relevant." },
-  { text: ".", id: 13, vector: [0.02, 0.01, -0.08], note: "The model predicts a likely stopping point too." },
-];
 
 const rounds: PredictionRound[] = [
   {
@@ -68,7 +53,6 @@ function ArrowIcon() {
 
 export function BlackBoxExperience() {
   const [opened, setOpened] = useState(false);
-  const [activeToken, setActiveToken] = useState<Token>(responseTokens[4]);
   const [roundIndex, setRoundIndex] = useState(0);
   const [choices, setChoices] = useState<string[]>([]);
   const [revealed, setRevealed] = useState(false);
@@ -178,64 +162,7 @@ export function BlackBoxExperience() {
         </div>
       </section>
 
-      <section id="token-chamber" className={`${styles.scene} ${styles.tokenScene}`} aria-labelledby="token-title">
-        <div className={styles.gridPlane} aria-hidden="true" />
-        <div className="shell relative z-10 py-24 sm:py-32">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="font-mono text-label uppercase text-cyan">01 / Break the sentence apart</p>
-            <h2 id="token-title" className="mt-5 text-h2 font-semibold text-ink">The sentence is not a sentence inside the model.</h2>
-            <p className="mx-auto mt-5 max-w-2xl text-lead text-muted">
-              It is processed as tokens: small chunks that are converted into numerical representations and repeatedly used to predict what comes next.
-            </p>
-          </div>
-
-          <div className={styles.tokenMachine} data-open={opened ? "true" : "false"}>
-            <div className={styles.machineRings} aria-hidden="true">
-              <i />
-              <i />
-              <i />
-            </div>
-            <p className={styles.machineLabel}>RESPONSE / TOKEN STREAM</p>
-            <div className={styles.tokenRow} aria-label="Tokenized response">
-              {responseTokens.map((token, index) => (
-                <button
-                  type="button"
-                  key={`${token.text}-${index}`}
-                  onClick={() => setActiveToken(token)}
-                  className={`${styles.tokenChip} ${activeToken.text === token.text ? styles.tokenActive : ""}`}
-                  style={{ "--token-delay": `${index * 80}ms` } as React.CSSProperties}
-                >
-                  <span>{token.text}</span>
-                  <small>t{String(index + 1).padStart(2, "0")}</small>
-                </button>
-              ))}
-            </div>
-
-            <div className={styles.tokenInspector} aria-live="polite">
-              <div>
-                <p className={styles.inspectorLabel}>Selected token</p>
-                <strong className={styles.inspectorToken}>{activeToken.text}</strong>
-              </div>
-              <div>
-                <p className={styles.inspectorLabel}>Illustrative token ID</p>
-                <strong>{activeToken.id}</strong>
-              </div>
-              <div>
-                <p className={styles.inspectorLabel}>3D slice of a much larger vector</p>
-                <code>[{activeToken.vector.map((value) => value.toFixed(2)).join(", ")}]</code>
-              </div>
-              <p className={styles.inspectorNote}>{activeToken.note}</p>
-            </div>
-          </div>
-
-          <div className={styles.truthStrip}>
-            <span>Important:</span>
-            <p>
-              The token IDs and three-dimensional vectors above are intentionally illustrative. Real production models use model-specific tokenizers and high-dimensional internal representations. The mechanism is the lesson; fake precision is not.
-            </p>
-          </div>
-        </div>
-      </section>
+      <MeaningSpace opened={opened} />
 
       <section className={`${styles.scene} ${styles.gameScene}`} aria-labelledby="game-title">
         <div className="shell relative z-10 py-24 sm:py-32">
