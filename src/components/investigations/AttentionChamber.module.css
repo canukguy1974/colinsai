@@ -155,7 +155,7 @@
 }
 
 .beamLayer line {
-  --beam-strength: 0.2;
+  --beam-opacity: 0.2;
   --beam-width: 0.25px;
   stroke: var(--color-violet);
   stroke-width: var(--beam-width);
@@ -170,7 +170,7 @@
 
 .reactor[data-phase="2"] .beamLayer line,
 .reactor[data-phase="3"] .beamLayer line {
-  opacity: calc(0.16 + var(--beam-strength) * 0.72);
+  opacity: var(--beam-opacity);
 }
 
 .reactor[data-phase="3"] .beamLayer line {
@@ -180,7 +180,9 @@
 }
 
 .signalNode {
-  --signal-strength: 0.2;
+  --node-alpha: 0.2;
+  --node-scale: 1;
+  --node-glow: 0.8rem;
   position: absolute;
   z-index: 4;
   display: grid;
@@ -214,12 +216,12 @@
 
 .reactor[data-phase="2"] .signalNode,
 .reactor[data-phase="3"] .signalNode {
-  border-color: rgb(155 107 255 / calc(0.16 + var(--signal-strength) * 0.55));
-  box-shadow: 0 0 calc(0.5rem + var(--signal-strength) * 1.7rem) rgb(155 107 255 / calc(0.05 + var(--signal-strength) * 0.18));
+  border-color: rgb(155 107 255 / var(--node-alpha));
+  box-shadow: 0 0 var(--node-glow) rgb(155 107 255 / 0.18);
 }
 
 .reactor[data-phase="3"] .signalNode {
-  transform: translate(-50%, -50%) scale(calc(0.96 + var(--signal-strength) * 0.08));
+  transform: translate(-50%, -50%) scale(var(--node-scale));
 }
 
 .targetNode {
@@ -279,17 +281,15 @@
 }
 
 .flowParticles i {
-  --particle: 0;
   position: absolute;
-  left: calc(10% + (var(--particle) * 8.4%));
-  top: calc(16% + ((var(--particle) % 4) * 9%));
   width: 0.28rem;
   height: 0.28rem;
   border-radius: 50%;
   background: var(--color-cyan);
   box-shadow: 0 0 0.8rem rgb(69 224 210 / 0.55);
-  animation: particleDrop calc(1.5s + (var(--particle) * 0.06s)) ease-in infinite;
-  animation-delay: calc(var(--particle) * -0.12s);
+  animation-name: particleDrop;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
 }
 
 .phaseControls {
@@ -616,5 +616,5 @@
 @keyframes particleDrop {
   0% { opacity: 0; transform: translate(0, 0) scale(0.7); }
   22% { opacity: 0.8; }
-  100% { opacity: 0; transform: translate(calc((50vw - 50%) * 0.08), 18rem) scale(0.2); }
+  100% { opacity: 0; transform: translate(0, 18rem) scale(0.2); }
 }
