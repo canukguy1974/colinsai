@@ -1,0 +1,720 @@
+.scene {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+  border-bottom: 1px solid var(--color-line-soft);
+  background:
+    radial-gradient(circle at 50% 45%, rgb(76 125 255 / 0.12), transparent 26rem),
+    linear-gradient(180deg, #070b16 0%, #05070e 100%);
+}
+
+.gridPlane {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgb(109 151 255 / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(109 151 255 / 0.08) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: radial-gradient(circle at center, black 10%, transparent 78%);
+}
+
+.contextChooser {
+  margin-top: 3rem;
+  border: 1px solid var(--color-line);
+  border-radius: 1.4rem;
+  background: rgb(10 16 32 / 0.7);
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.03);
+  opacity: 0.76;
+  transform: translateY(0.8rem);
+  transition: opacity 500ms ease, transform 700ms var(--ease-out-expo);
+}
+
+.contextChooser[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.kicker,
+.panelTopline,
+.readoutLabel,
+.layerLabels,
+.truthStrip > span {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--color-faint);
+}
+
+.kicker,
+.readoutLabel,
+.truthStrip > span {
+  text-transform: uppercase;
+}
+
+.contextButtons {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.contextButton {
+  position: relative;
+  display: grid;
+  min-height: 5.25rem;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  background: rgb(5 7 14 / 0.62);
+  padding: 1rem 1.1rem;
+  text-align: left;
+  color: var(--color-muted);
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms var(--ease-out-expo);
+}
+
+.contextButton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(100deg, rgb(76 125 255 / 0.1), rgb(155 107 255 / 0.03));
+  transition: opacity 180ms ease;
+}
+
+.contextButton:hover {
+  transform: translateY(-2px);
+  border-color: #2a3963;
+}
+
+.contextButton span,
+.contextButton strong {
+  position: relative;
+  z-index: 1;
+}
+
+.contextButton span {
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.contextButton strong {
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 0.5rem 0.72rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  color: var(--color-ink);
+}
+
+.contextActive {
+  border-color: rgb(109 151 255 / 0.65);
+  background: rgb(12 20 38 / 0.9);
+}
+
+.contextActive::before {
+  opacity: 1;
+}
+
+.contextActive strong {
+  border-color: rgb(69 224 210 / 0.35);
+  color: var(--color-cyan);
+}
+
+.contextHint {
+  margin: 1rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--color-dim);
+}
+
+.contextHint strong {
+  color: var(--color-ink);
+}
+
+.labGrid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.spacePanel,
+.readoutPanel {
+  border: 1px solid var(--color-line);
+  border-radius: 1.4rem;
+  background: linear-gradient(180deg, rgb(12 20 38 / 0.9), rgb(7 11 22 / 0.92));
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.035);
+}
+
+.spacePanel {
+  overflow: hidden;
+}
+
+.panelTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-line-soft);
+  padding: 0.9rem 1rem;
+}
+
+.panelTopline span:last-child {
+  color: var(--color-cyan);
+}
+
+.meaningSpace {
+  position: relative;
+  aspect-ratio: 1.25 / 1;
+  min-height: 30rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgb(109 151 255 / 0.08), transparent 38%),
+    radial-gradient(circle at 20% 48%, rgb(76 125 255 / 0.09), transparent 24%),
+    radial-gradient(circle at 78% 48%, rgb(69 224 210 / 0.08), transparent 24%),
+    repeating-radial-gradient(circle at 50% 50%, transparent 0 4.8rem, rgb(109 151 255 / 0.035) 4.9rem 5rem);
+}
+
+.meaningSpace::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.48;
+  background-image:
+    radial-gradient(circle at 15% 18%, rgb(255 255 255 / 0.45) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 32% 73%, rgb(109 151 255 / 0.55) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 64% 21%, rgb(69 224 210 / 0.45) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 89% 74%, rgb(255 255 255 / 0.35) 0 1px, transparent 1.2px);
+  background-size: 13rem 11rem, 17rem 15rem, 19rem 16rem, 23rem 21rem;
+}
+
+.neighborhood {
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  width: 34%;
+  border: 1px solid rgb(109 151 255 / 0.08);
+  border-radius: 50%;
+  filter: blur(0.1px);
+}
+
+.neighborhood span {
+  position: absolute;
+  top: -1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: var(--color-faint);
+}
+
+.financeField {
+  left: 5%;
+  background: radial-gradient(circle, rgb(76 125 255 / 0.08), transparent 68%);
+}
+
+.riverField {
+  right: 5%;
+  background: radial-gradient(circle, rgb(69 224 210 / 0.07), transparent 68%);
+}
+
+.axisX,
+.axisY {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.axisX {
+  left: 7%;
+  right: 7%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-blue-bright), transparent);
+}
+
+.axisY {
+  top: 7%;
+  bottom: 7%;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(transparent, var(--color-blue-bright), transparent);
+}
+
+.conceptNode {
+  --proximity: 0;
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transform: translate(-50%, -50%);
+  opacity: calc(0.34 + var(--proximity) * 0.52);
+  transition: opacity 350ms ease, filter 350ms ease;
+}
+
+.conceptNode i {
+  width: 0.34rem;
+  height: 0.34rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--color-faint);
+  box-shadow: 0 0 0.8rem rgb(109 151 255 / 0.1);
+}
+
+.conceptNode span {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-dim);
+}
+
+.conceptRelevant {
+  opacity: calc(0.58 + var(--proximity) * 0.42);
+}
+
+.conceptRelevant i {
+  background: var(--color-cyan);
+  box-shadow: 0 0 1rem rgb(69 224 210 / 0.35);
+}
+
+.conceptRelevant span {
+  color: var(--color-muted);
+}
+
+.trajectory {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trajectory path {
+  fill: none;
+  stroke: var(--color-blue-bright);
+  stroke-width: 0.23;
+  stroke-dasharray: 1.2 1.7;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.34;
+}
+
+.bankNode {
+  position: absolute;
+  z-index: 6;
+  display: grid;
+  min-width: 5.5rem;
+  transform: translate(-50%, -50%);
+  place-items: center;
+  border: 1px solid rgb(109 151 255 / 0.72);
+  border-radius: 999px;
+  background: linear-gradient(110deg, rgb(76 125 255 / 0.95), rgb(155 107 255 / 0.92));
+  padding: 0.72rem 0.9rem 0.62rem;
+  color: white;
+  box-shadow:
+    0 0 0 0.45rem rgb(76 125 255 / 0.08),
+    0 0 2.2rem rgb(76 125 255 / 0.38);
+  transition: left 700ms var(--ease-out-expo), top 700ms var(--ease-out-expo), box-shadow 350ms ease;
+}
+
+.bankNode::after {
+  content: "";
+  position: absolute;
+  inset: -0.7rem;
+  border: 1px solid rgb(109 151 255 / 0.16);
+  border-radius: inherit;
+  animation: nodePulse 2.8s ease-in-out infinite;
+}
+
+.bankNode span {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.bankNode small {
+  margin-top: 0.18rem;
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.11em;
+  opacity: 0.78;
+}
+
+.layerControl {
+  border-top: 1px solid var(--color-line-soft);
+  padding: 1rem;
+  background: rgb(5 7 14 / 0.38);
+}
+
+.layerLabels {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.layerLabels span:last-child {
+  text-align: right;
+}
+
+.layerLabels strong {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 550;
+  letter-spacing: 0;
+  color: var(--color-ink);
+}
+
+.layerControl input[type="range"] {
+  width: 100%;
+  accent-color: var(--color-cyan);
+}
+
+.layerTicks {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  margin-top: 0.45rem;
+}
+
+.layerTicks i {
+  justify-self: center;
+  width: 1px;
+  height: 0.35rem;
+  background: var(--color-line);
+}
+
+.readoutPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1rem, 2.4vw, 1.3rem);
+}
+
+.readoutBlock h3 {
+  margin-top: 0.65rem;
+  max-width: 18ch;
+  font-size: clamp(1.35rem, 1.12rem + 0.7vw, 1.8rem);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+}
+
+.readoutBlock p:last-child,
+.numberReveal p {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+
+.readoutBlock strong {
+  color: var(--color-ink);
+}
+
+.neighborReadout {
+  border-top: 1px solid var(--color-line-soft);
+  padding-top: 1rem;
+}
+
+.neighborReadout ol {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.neighborReadout li {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(4rem, auto) 1fr;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.neighborReadout li > span {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-faint);
+}
+
+.neighborReadout li > strong {
+  font-size: 0.84rem;
+  font-weight: 550;
+  color: var(--color-ink);
+}
+
+.neighborReadout li > i {
+  --near: 20%;
+  position: relative;
+  display: block;
+  height: 0.35rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-line-soft);
+}
+
+.neighborReadout li > i::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--near);
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-blue), var(--color-cyan));
+}
+
+.revealButton {
+  margin-top: auto;
+  border: 1px solid rgb(109 151 255 / 0.38);
+  border-radius: 999px;
+  background: rgb(76 125 255 / 0.08);
+  padding: 0.82rem 1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  transition: transform 180ms var(--ease-out-expo), border-color 180ms ease, background 180ms ease;
+}
+
+.revealButton:hover {
+  transform: translateY(-2px);
+  border-color: rgb(109 151 255 / 0.7);
+  background: rgb(76 125 255 / 0.12);
+}
+
+.numberReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  overflow: hidden;
+  transition: grid-template-rows 500ms var(--ease-out-expo), opacity 350ms ease;
+}
+
+.numberReveal > * {
+  min-height: 0;
+}
+
+.numberRevealOpen {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  overflow: visible;
+}
+
+.vectorEquation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  border-top: 1px solid var(--color-line-soft);
+  padding-top: 1rem;
+}
+
+.vectorEquation span {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--color-cyan);
+}
+
+.vectorEquation b {
+  color: var(--color-faint);
+}
+
+.vectorEquation code {
+  font-size: 0.82rem;
+  color: var(--color-ink);
+}
+
+.dimensionBars {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.dimensionBars > div {
+  display: grid;
+  grid-template-columns: 1.7rem 1fr 3rem;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.dimensionBars span,
+.dimensionBars strong {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--color-faint);
+}
+
+.dimensionBars > div > i {
+  position: relative;
+  display: block;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgb(155 107 255 / 0.16), rgb(76 125 255 / 0.18) 50%, rgb(69 224 210 / 0.14));
+}
+
+.dimensionBars > div > i::after {
+  content: "";
+  position: absolute;
+  top: -0.25rem;
+  bottom: -0.25rem;
+  left: 50%;
+  width: 1px;
+  background: var(--color-line);
+}
+
+.dimensionBars b {
+  --value: 50%;
+  position: absolute;
+  top: 50%;
+  left: var(--value);
+  width: 0.55rem;
+  height: 0.55rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--color-cyan);
+  box-shadow: 0 0 0.8rem rgb(69 224 210 / 0.45);
+  transition: left 500ms var(--ease-out-expo);
+}
+
+.lessonStrip {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.lessonStrip > div {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  align-items: start;
+  gap: 0.75rem;
+  border: 1px solid var(--color-line-soft);
+  border-radius: 1rem;
+  background: rgb(7 11 22 / 0.55);
+  padding: 1rem;
+}
+
+.lessonStrip span {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 1px solid rgb(69 224 210 / 0.25);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-cyan);
+}
+
+.lessonStrip p {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.lessonStrip strong {
+  color: var(--color-ink);
+}
+
+.truthStrip {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  border-left: 1px solid var(--color-violet);
+  background: linear-gradient(90deg, rgb(155 107 255 / 0.07), transparent 60%);
+  padding: 1rem 1.1rem;
+}
+
+.truthStrip p {
+  margin: 0;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--color-dim);
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+
+@media (min-width: 640px) {
+  .contextButtons {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lessonStrip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .labGrid {
+    grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 0.72fr);
+  }
+
+  .meaningSpace {
+    min-height: 36rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .meaningSpace {
+    min-height: 26rem;
+    aspect-ratio: 0.88 / 1;
+  }
+
+  .neighborhood {
+    width: 40%;
+  }
+
+  .conceptNode span {
+    font-size: 0.58rem;
+  }
+
+  .bankNode {
+    min-width: 4.8rem;
+    padding-inline: 0.7rem;
+  }
+
+  .layerLabels {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .layerLabels strong {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bankNode,
+  .dimensionBars b,
+  .contextChooser,
+  .contextButton,
+  .revealButton,
+  .numberReveal {
+    transition: none;
+  }
+
+  .bankNode::after {
+    animation: none;
+  }
+}
