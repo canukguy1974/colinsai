@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { MeaningSpace } from "./MeaningSpace";
+import { AttentionChamber } from "./AttentionChamber";
 import styles from "./BlackBoxExperience.module.css";
 
 type PredictionRound = {
@@ -163,12 +164,13 @@ export function BlackBoxExperience() {
       </section>
 
       <MeaningSpace opened={opened} />
+      <AttentionChamber />
 
       <section className={`${styles.scene} ${styles.gameScene}`} aria-labelledby="game-title">
         <div className="shell relative z-10 py-24 sm:py-32">
           <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
             <div className="lg:sticky lg:top-28">
-              <p className="font-mono text-label uppercase text-violet">02 / You vs. the machine</p>
+              <p className="font-mono text-label uppercase text-violet">03 / You vs. the machine</p>
               <h2 id="game-title" className="mt-5 text-h2 font-semibold text-ink">You predict language too.</h2>
               <p className="mt-5 max-w-lg text-lead text-muted">
                 Pick the continuation that feels most likely. Then we reveal a simplified model-style probability distribution and compare your intuition with it.
@@ -251,7 +253,7 @@ export function BlackBoxExperience() {
             A convincing sentence is evidence of <span className="text-gradient-ai">convincing language generation.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lead text-muted">
-            It may raise deeper questions about machine consciousness. It does not, by itself, answer them. Next we’ll expose attention, temperature, memory, tools, and the agent loop.
+            It may raise deeper questions about machine consciousness. It does not, by itself, answer them. Next we’ll expose temperature, memory, tools, and the agent loop.
           </p>
           <Link href="/investigations" className={`${styles.secondaryButton} mt-9 inline-flex`}>
             Return to investigations
