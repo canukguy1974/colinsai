@@ -54,6 +54,27 @@
   text-transform: uppercase;
 }
 
+.chooserTopline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.7rem 1.5rem;
+}
+
+.chooserTopline p {
+  margin: 0;
+}
+
+.chooserTopline p:last-child {
+  font-size: 0.85rem;
+  color: var(--color-dim);
+}
+
+.chooserTopline strong {
+  color: var(--color-ink);
+}
+
 .contextButtons {
   display: grid;
   gap: 0.8rem;
@@ -62,11 +83,8 @@
 
 .contextButton {
   position: relative;
-  display: grid;
+  display: block;
   min-height: 5.25rem;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 1rem;
   overflow: hidden;
   border: 1px solid var(--color-line);
   border-radius: 1rem;
@@ -91,25 +109,25 @@
   border-color: #2a3963;
 }
 
-.contextButton span,
-.contextButton strong {
+.contextButton > span {
   position: relative;
   z-index: 1;
-}
-
-.contextButton span {
-  font-size: 0.96rem;
-  line-height: 1.55;
+  display: block;
+  font-size: clamp(0.95rem, 0.9rem + 0.18vw, 1.04rem);
+  line-height: 1.65;
 }
 
 .contextButton strong {
+  display: inline-block;
+  margin-inline: 0.22rem;
   border: 1px solid var(--color-line);
   border-radius: 999px;
-  padding: 0.5rem 0.72rem;
+  padding: 0.18rem 0.46rem;
   font-family: var(--font-mono);
-  font-size: 0.76rem;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
   color: var(--color-ink);
+  transform: translateY(-0.03rem);
 }
 
 .contextActive {
@@ -124,6 +142,7 @@
 .contextActive strong {
   border-color: rgb(69 224 210 / 0.35);
   color: var(--color-cyan);
+  box-shadow: 0 0 1.2rem rgb(69 224 210 / 0.08);
 }
 
 .contextHint {
@@ -380,6 +399,10 @@
   accent-color: var(--color-cyan);
 }
 
+.layerControl input[type="range"]:disabled {
+  opacity: 0.4;
+}
+
 .layerTicks {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
@@ -391,6 +414,13 @@
   width: 1px;
   height: 0.35rem;
   background: var(--color-line);
+}
+
+.layerHelp {
+  margin: 0.75rem 0 0;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--color-faint);
 }
 
 .readoutPanel {
@@ -418,7 +448,8 @@
   color: var(--color-muted);
 }
 
-.readoutBlock strong {
+.readoutBlock strong,
+.numberReveal strong {
   color: var(--color-ink);
 }
 
@@ -493,21 +524,16 @@
 }
 
 .numberReveal {
-  display: grid;
-  grid-template-rows: 0fr;
+  max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: grid-template-rows 500ms var(--ease-out-expo), opacity 350ms ease;
-}
-
-.numberReveal > * {
-  min-height: 0;
+  transition: max-height 600ms var(--ease-out-expo), opacity 350ms ease, padding-top 350ms ease;
 }
 
 .numberRevealOpen {
-  grid-template-rows: 1fr;
+  max-height: 32rem;
   opacity: 1;
-  overflow: visible;
+  padding-top: 0.2rem;
 }
 
 .vectorEquation {
