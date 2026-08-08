@@ -13,6 +13,8 @@ type TokenSignal = {
   y: number;
 };
 
+const phases: Phase[] = [1, 2, 3];
+
 const scenes: Record<ContextMode, { sentence: string; signals: TokenSignal[]; sense: string }> = {
   finance: {
     sentence: "I deposited my paycheck at the BANK.",
@@ -112,35 +114,43 @@ export function AttentionChamber() {
               <div className={styles.orbitA} aria-hidden="true" />
               <div className={styles.orbitB} aria-hidden="true" />
               <svg className={styles.beamLayer} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                {scene.signals.filter((signal) => signal.token !== "BANK").map((signal) => (
-                  <line
-                    key={signal.token}
-                    x1={signal.x}
-                    y1={signal.y}
-                    x2="50"
-                    y2="75"
-                    style={{
-                      "--beam-strength": signal.weight / 43,
-                      "--beam-width": `${0.14 + signal.weight / 46}px`,
-                    } as React.CSSProperties}
-                  />
-                ))}
+                {scene.signals.filter((signal) => signal.token !== "BANK").map((signal) => {
+                  const strength = signal.weight / 43;
+                  return (
+                    <line
+                      key={signal.token}
+                      x1={signal.x}
+                      y1={signal.y}
+                      x2="50"
+                      y2="75"
+                      style={{
+                        "--beam-opacity": 0.16 + strength * 0.72,
+                        "--beam-width": `${0.14 + signal.weight / 46}px`,
+                      } as React.CSSProperties}
+                    />
+                  );
+                })}
               </svg>
 
-              {scene.signals.filter((signal) => signal.token !== "BANK").map((signal) => (
-                <div
-                  key={signal.token}
-                  className={styles.signalNode}
-                  style={{
-                    left: `${signal.x}%`,
-                    top: `${signal.y}%`,
-                    "--signal-strength": signal.weight / 43,
-                  } as React.CSSProperties}
-                >
-                  <span>{signal.token}</span>
-                  <small>{phase >= 2 ? `${signal.weight}%` : "KEY"}</small>
-                </div>
-              ))}
+              {scene.signals.filter((signal) => signal.token !== "BANK").map((signal) => {
+                const strength = signal.weight / 43;
+                return (
+                  <div
+                    key={signal.token}
+                    className={styles.signalNode}
+                    style={{
+                      left: `${signal.x}%`,
+                      top: `${signal.y}%`,
+                      "--node-alpha": 0.16 + strength * 0.55,
+                      "--node-scale": 0.96 + strength * 0.08,
+                      "--node-glow": `${0.5 + strength * 1.7}rem`,
+                    } as React.CSSProperties}
+                  >
+                    <span>{signal.token}</span>
+                    <small>{phase >= 2 ? `${signal.weight}%` : "KEY"}</small>
+                  </div>
+                );
+              })}
 
               <div className={styles.targetNode}>
                 <span>BANK</span>
@@ -148,12 +158,22 @@ export function AttentionChamber() {
               </div>
 
               <div className={styles.flowParticles} aria-hidden="true">
-                {Array.from({ length: 10 }, (_, index) => <i key={index} style={{ "--particle": index } as React.CSSProperties} />)}
+                {Array.from({ length: 10 }, (_, index) => (
+                  <i
+                    key={index}
+                    style={{
+                      left: `${10 + index * 8.4}%`,
+                      top: `${16 + (index % 4) * 9}%`,
+                      animationDuration: `${1.5 + index * 0.06}s`,
+                      animationDelay: `${index * -0.12}s`,
+                    }}
+                  />
+                ))}
               </div>
             </div>
 
             <div className={styles.phaseControls}>
-              {(Object.keys(phaseCopy) as unknown as Phase[]).map((step) => (
+              {phases.map((step) => (
                 <button
                   key={step}
                   type="button"
