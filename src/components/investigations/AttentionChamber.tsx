@@ -86,7 +86,7 @@ export function AttentionChamber() {
             So how did context move <span className="text-gradient-ai">BANK?</span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-lead text-muted">
-            One of the transformer's core mechanisms lets a token selectively pull information from other tokens. Change the sentence, then X-ray one simplified attention pass.
+            One of the transformer&apos;s core mechanisms lets a token selectively pull information from other tokens. Change the sentence, then X-ray one simplified attention pass.
           </p>
         </div>
 
@@ -243,7 +243,7 @@ export function AttentionChamber() {
         <div className={styles.truthStrip}>
           <span>IMPORTANT:</span>
           <p>
-            The weights in this scene are illustrative, not measurements from a named model. Real transformer layers run multiple attention heads in parallel, and attention weights alone are not a complete explanation of a model's reasoning. What is real is the mechanism: learned queries score learned keys, normalized scores weight value vectors, and the resulting information is mixed into token representations.
+            The weights in this scene are illustrative, not measurements from a named model. Real transformer layers run multiple attention heads in parallel, and attention weights alone are not a complete explanation of model reasoning. What is real is the mechanism: learned queries score learned keys, normalized scores weight value vectors, and the resulting information is mixed into token representations.
           </p>
         </div>
       </div>
