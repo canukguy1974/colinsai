@@ -65,19 +65,40 @@ function nearestConcepts(x: number, y: number) {
     .slice(0, 4);
 }
 
+function Sentence({ text }: { text: string }) {
+  const [before, after] = text.split("BANK");
+  return (
+    <span>
+      {before}<strong>BANK</strong>{after}
+    </span>
+  );
+}
+
 export function MeaningSpace({ opened }: { opened: boolean }) {
-  const [mode, setMode] = useState<ContextMode>("finance");
-  const [layer, setLayer] = useState(8);
+  const [mode, setMode] = useState<ContextMode | null>(null);
+  const [layer, setLayer] = useState(0);
   const [showNumbers, setShowNumbers] = useState(false);
 
   const progress = layer / 8;
+  const activeTarget = mode ? target[mode] : start;
   const bank = {
-    x: lerp(start.x, target[mode].x, progress),
-    y: lerp(start.y, target[mode].y, progress),
+    x: lerp(start.x, activeTarget.x, progress),
+    y: lerp(start.y, activeTarget.y, progress),
   };
 
   const vector = vectorFor(bank.x, bank.y, layer);
   const nearest = useMemo(() => nearestConcepts(bank.x, bank.y), [bank.x, bank.y]);
+
+  function chooseContext(nextMode: ContextMode) {
+    setMode(nextMode);
+    setLayer(8);
+  }
+
+  const explanationTitle = !mode
+    ? "Right now, BANK could mean several things."
+    : layer === 0
+      ? "You rewound BANK to its ambiguous starting point."
+      : "The point moved because the context changed.";
 
   return (
     <section id="token-chamber" className={styles.scene} aria-labelledby="meaning-space-title">
@@ -94,22 +115,24 @@ export function MeaningSpace({ opened }: { opened: boolean }) {
         </div>
 
         <div className={styles.contextChooser} data-open={opened ? "true" : "false"}>
-          <p className={styles.kicker}>SAME WORD / DIFFERENT CONTEXT</p>
+          <div className={styles.chooserTopline}>
+            <p className={styles.kicker}>SAME WORD / DIFFERENT CONTEXT</p>
+            <p>Pick a sentence. Watch <strong>BANK</strong> move.</p>
+          </div>
           <div className={styles.contextButtons} role="group" aria-label="Choose a sentence using the word bank">
             {(Object.keys(sentences) as ContextMode[]).map((key) => (
               <button
                 key={key}
                 type="button"
                 className={`${styles.contextButton} ${mode === key ? styles.contextActive : ""}`}
-                onClick={() => setMode(key)}
+                onClick={() => chooseContext(key)}
               >
-                <span>{sentences[key].replace("BANK", "")}</span>
-                <strong>BANK</strong>
+                <Sentence text={sentences[key]} />
               </button>
             ))}
           </div>
           <p className={styles.contextHint}>
-            The letters in <strong>BANK</strong> stay the same. The surrounding words change what representation becomes useful.
+            The letters in <strong>BANK</strong> stay the same. The surrounding words change which learned relationships become useful.
           </p>
         </div>
 
@@ -131,7 +154,7 @@ export function MeaningSpace({ opened }: { opened: boolean }) {
               <div className={styles.axisY} aria-hidden="true" />
 
               {concepts.map((node) => {
-                const relevant = node.group === mode;
+                const relevant = mode !== null && node.group === mode;
                 const proximity = Math.max(0, 1 - Math.hypot(node.x - bank.x, node.y - bank.y) / 45);
                 return (
                   <div
@@ -149,11 +172,13 @@ export function MeaningSpace({ opened }: { opened: boolean }) {
                 );
               })}
 
-              <svg className={styles.trajectory} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <path
-                  d={`M ${start.x} ${start.y} C 46 ${start.y - 7}, ${target[mode].x + (mode === "finance" ? 10 : -10)} ${target[mode].y + 8}, ${target[mode].x} ${target[mode].y}`}
-                />
-              </svg>
+              {mode && (
+                <svg className={styles.trajectory} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  <path
+                    d={`M ${start.x} ${start.y} C 46 ${start.y - 7}, ${target[mode].x + (mode === "finance" ? 10 : -10)} ${target[mode].y + 8}, ${target[mode].x} ${target[mode].y}`}
+                  />
+                </svg>
+              )}
 
               <div
                 className={styles.bankNode}
@@ -161,37 +186,45 @@ export function MeaningSpace({ opened }: { opened: boolean }) {
                 aria-live="polite"
               >
                 <span>BANK</span>
-                <small>{layer === 0 ? "AMBIGUOUS" : mode === "finance" ? "FINANCIAL SENSE" : "RIVER SENSE"}</small>
+                <small>
+                  {!mode || layer === 0 ? "AMBIGUOUS" : mode === "finance" ? "FINANCIAL SENSE" : "RIVER SENSE"}
+                </small>
               </div>
             </div>
 
             <div className={styles.layerControl}>
               <div className={styles.layerLabels}>
                 <span>EARLY REPRESENTATION</span>
-                <strong>{layer === 0 ? "Mostly ambiguous" : `Context incorporated: ${Math.round(progress * 100)}%`}</strong>
+                <strong>
+                  {!mode ? "Choose a sentence above" : layer === 0 ? "Mostly ambiguous" : `Context incorporated: ${Math.round(progress * 100)}%`}
+                </strong>
                 <span>LATER REPRESENTATION</span>
               </div>
               <input
-                aria-label="Scrub through simplified transformer layers"
+                aria-label="Scrub through a simplified sequence of transformer layers"
                 type="range"
                 min="0"
                 max="8"
                 step="1"
                 value={layer}
+                disabled={!mode}
                 onChange={(event) => setLayer(Number(event.target.value))}
               />
               <div className={styles.layerTicks} aria-hidden="true">
                 {Array.from({ length: 9 }, (_, index) => <i key={index} />)}
               </div>
+              <p className={styles.layerHelp}>
+                After choosing a sentence, drag this backward and forward. It stands in for the way representations can become increasingly contextual as information moves through the network.
+              </p>
             </div>
           </div>
 
           <aside className={styles.readoutPanel}>
             <div className={styles.readoutBlock}>
-              <p className={styles.readoutLabel}>What just happened?</p>
-              <h3>The point moved because the context changed.</h3>
+              <p className={styles.readoutLabel}>What are you looking at?</p>
+              <h3>{explanationTitle}</h3>
               <p>
-                Nearby points represent patterns the model has learned to treat as related. In this simplified view, the sentence pulls <strong>BANK</strong> toward the neighborhood that fits.
+                Nearby points stand for patterns the model has learned to treat as related. We’ve flattened an impossible-to-see high-dimensional representation into a map your eyes can follow.
               </p>
             </div>
 
@@ -228,7 +261,7 @@ export function MeaningSpace({ opened }: { opened: boolean }) {
                 ))}
               </div>
               <p>
-                Those numbers are the vector. We turned three of them into a visible position so your eyes could follow the idea. A real model uses far more dimensions than we can draw.
+                <strong>Those numbers are the vector.</strong> We turned a tiny slice of it into a visible position so your eyes could follow the idea. A real model uses far more coordinates than we can draw.
               </p>
             </div>
           </aside>
@@ -237,11 +270,11 @@ export function MeaningSpace({ opened }: { opened: boolean }) {
         <div className={styles.lessonStrip}>
           <div>
             <span>1</span>
-            <p><strong>One word</strong> can begin ambiguous.</p>
+            <p><strong>One token</strong> can start with several plausible relationships.</p>
           </div>
           <div>
             <span>2</span>
-            <p><strong>Context</strong> changes which relationships matter.</p>
+            <p><strong>Context</strong> changes which relationships become useful.</p>
           </div>
           <div>
             <span>3</span>
